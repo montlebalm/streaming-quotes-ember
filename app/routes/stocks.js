@@ -1,6 +1,5 @@
 import _ from '../utils/underscore';
 import Ember from 'ember';
-import Streamer from '../services/streamer';
 
 var StocksRoute = Ember.Route.extend({
   deactivate: function() {
@@ -12,26 +11,25 @@ var StocksRoute = Ember.Route.extend({
     };
   },
   setupController: function(controller, model) {
-    var self = this;
-
     controller.set('model', {
-      lastUpdatedDate: null
+      lastUpdatedDate: null,
+      updates: {}
     });
 
-    model.symbols.then(function(obj) {
-      var streamer = Streamer.create({
-        onConnect: function(data) {
-          controller.set('stocks', _.values(data));
-        },
-        onUpdate: function(updates, date) {
-          controller.set('updates', updates);
-          controller.set('model.lastUpdatedDate', date);
-        },
-        symbols: model.symbols.toArray()
-      });
-      streamer.start();
-      self.set('streamer', streamer);
+    var streamer = this.get('streamer');
+    streamer.on('connect', this, 'onStreamConnect');
+    streamer.on('update', this, 'onStreamUpdate');
+
+    model.symbols.then(function() {
+      streamer.start(model.symbols.toArray());
     });
+  },
+  onStreamConnect: function(data) {
+    this.controller.set('stocks', _.values(data));
+  },
+  onStreamUpdate: function(updates, date, data) {
+    this.controller.set('model.updates', updates);
+    this.controller.set('model.lastUpdatedDate', date);
   }
 });
 

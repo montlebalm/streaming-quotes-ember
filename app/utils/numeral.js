@@ -1,4 +1,4 @@
-// numeral is a global
+/* global numeral */
 
 var _numeral = numeral;
 delete window.numeral;

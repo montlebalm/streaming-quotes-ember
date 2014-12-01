@@ -25,12 +25,12 @@ function makeStock(symbol, name) {
   };
 }
 
-// Randomly augment the `seed` value by a max of `diff`
-function randomVariant(seed, diff) {
+// Randomly augment the `seed` value by up to 1%
+function randomVariant(seed) {
   return seed + (Math.random() * seed / 99);
 }
 
-function getUpdates(stock) {
+function getUpdate(stock) {
   var updates = {};
 
   _.each(COLUMNS, function(col) {
@@ -43,26 +43,28 @@ function getUpdates(stock) {
   return updates;
 }
 
-var Streamer = Ember.Object.extend({
-  onConnect: function(data) {},
-  onUpdate: function(updates, date) {},
+var Streamer = Ember.Object.extend(Ember.Evented, {
   schedule: function() {
     return Ember.run.later(this, function() {
       var updates = {};
-      var updateObjs = _.map(this.get('stocks'), function(s) {
-        updates[s.symbol] = getUpdates(s);
-      });
-      this.get('onUpdate')(updates, new Date());
+      var stocks = this.get('stocks');
 
+      _.each(stocks, function(stock) {
+        updates[stock.symbol] = getUpdate(stock);
+      });
+
+      this.trigger('update', updates, new Date(), stocks);
       this.set('timer', this.schedule());
     }, 1000);
   },
-  start: function() {
+  start: function(symbols) {
+    this.set('symbols', symbols);
+
     // Do the initial stock setup
     this.set('stocks', _.map(this.get('symbols'), function(s) {
       return STOCKS[s.get('symbol')];
     }));
-    this.get('onConnect')(STOCKS);
+    this.trigger('connect', STOCKS);
 
     this.set('timer', this.schedule());
   },

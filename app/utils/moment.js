@@ -1,4 +1,4 @@
-// moment is a global
+/* global moment */
 
 var _moment = moment;
 delete window.moment;

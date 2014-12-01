@@ -2,54 +2,67 @@ import _ from '../utils/underscore';
 import Ember from 'ember';
 import moment from '../utils/moment';
 
+var LAST_UPDATED_TEXT = 'Waiting...';
+var LAST_UPDATED_FORMAT = 'h:mm:ss a';
+
+function stockToDisplay(stock) {
+  return {
+    name: stock.name,
+    symbol: stock.symbol,
+    values: {
+      ask: {
+        value: stock.ask,
+        updated: false
+      },
+      bid: {
+        value: stock.bid,
+        updated: false
+      },
+      price: {
+        value: stock.price,
+        updated: false
+      },
+      volume: {
+        value: stock.volume,
+        updated: false
+      }
+    }
+  };
+}
+
 var StocksController = Ember.ObjectController.extend({
   lastUpdated: function() {
-    if (!this.get('model.lastUpdatedDate')){
-      return 'Waiting...';
+    var date = this.get('model.lastUpdatedDate');
+
+    if (!date) {
+      return LAST_UPDATED_TEXT;
     }
 
-    return moment(this.get('model.lastUpdatedDate')).format('h:mm:ss a');
+    return moment(date).format(LAST_UPDATED_FORMAT);
   }.property('model.lastUpdatedDate'),
   stocks: [],
   stocksDisplay: function() {
-    var updates = this.get('updates');
+    var updates = this.get('model.updates');
 
-    return _.map(this.get('stocks').toArray(), function(stock) {
-      var update = updates[stock.symbol] || {};
-      var display = {
-        name: stock.name,
-        symbol: stock.symbol,
-        values: {
-          ask: {
-            value: stock.ask,
-            updated: false
-          },
-          bid: {
-            value: stock.bid,
-            updated: false
-          },
-          price: {
-            value: stock.price,
-            updated: false
-          },
-          volume: {
-            value: stock.volume,
-            updated: false
-          }
-        }
-      };
+    function updateStock(stock) {
+      return _.extend(stock, updates[stock.symbol]);
+    }
 
-      // Update the values
-      var props = _.pick(update, 'ask', 'bid', 'price', 'volume');
-      _.each(props, function(value, key) {
-        stock[key] = display.values[key].value = value;
+    function updateDisplay(display) {
+      _.each(updates[display.symbol], function(value, key) {
+        display.values[key].value = value;
         display.values[key].updated = true;
       });
 
       return display;
-    });
-  }.property('updates'),
-  updates: {}
+    }
+
+    return _.chain(this.get('stocks').toArray())
+      .map(updateStock)
+      .map(stockToDisplay)
+      .map(updateDisplay)
+      .value();
+  }.property('stocks', 'model.updates')
 });
 
 export default StocksController;

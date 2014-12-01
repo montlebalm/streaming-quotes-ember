@@ -1,4 +1,4 @@
-// moment is a global
+/* global _ */
 
 var __ = _;
 delete window._;
