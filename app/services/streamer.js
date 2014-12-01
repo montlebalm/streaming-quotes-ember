@@ -8,7 +8,7 @@ var STOCKS = {
   c: makeStock('c', 'C co.'),
   d: makeStock('d', 'D Dungarees'),
   e: makeStock('e', 'Electric E Inc.'),
-  f: makeStock('f', 'Fantastic F co.Agile A'),
+  f: makeStock('f', 'Fantastic F co.'),
   g: makeStock('g', 'Guaranteed G LLC.'),
   h: makeStock('h', 'Hyped H'),
   i: makeStock('i', 'Industrious I Inc.')
@@ -25,6 +25,7 @@ function makeStock(symbol, name) {
   };
 }
 
+// Randomly augment the `seed` value by a max of `diff`
 function randomVariant(seed, diff) {
   return seed + (Math.random() * seed / 99);
 }
@@ -33,6 +34,7 @@ function getUpdates(stock) {
   var updates = {};
 
   _.each(COLUMNS, function(col) {
+    // Only update some fields
     if (Math.floor(Math.random() * 4) === 0) {
       updates[col] = randomVariant(stock[col]);
     }
@@ -42,32 +44,27 @@ function getUpdates(stock) {
 }
 
 var Streamer = Ember.Object.extend({
-  init: function() {
-    this.set('stocks', _.map(this.get('symbols'), function(s) {
-      return STOCKS[s.get('symbol')];
-    }));
-  },
-  firstRun: true,
-  onUpdate: function(date) {},
-  schedule: function(fn) {
+  onConnect: function(data) {},
+  onUpdate: function(updates, date) {},
+  schedule: function() {
     return Ember.run.later(this, function() {
       var updates = {};
-
-      _.each(this.get('stocks'), function(s) {
+      var updateObjs = _.map(this.get('stocks'), function(s) {
         updates[s.symbol] = getUpdates(s);
       });
+      this.get('onUpdate')(updates, new Date());
 
-      if (this.get('firstRun')) {
-        updates = STOCKS;
-        this.set('firstRun', false);
-      }
-
-      fn(updates, new Date());
-      this.set('timer', this.schedule(fn));
+      this.set('timer', this.schedule());
     }, 1000);
   },
   start: function() {
-    this.set('timer', this.schedule(this.get('onUpdate')));
+    // Do the initial stock setup
+    this.set('stocks', _.map(this.get('symbols'), function(s) {
+      return STOCKS[s.get('symbol')];
+    }));
+    this.get('onConnect')(STOCKS);
+
+    this.set('timer', this.schedule());
   },
   stocks: [],
   stop: function() {

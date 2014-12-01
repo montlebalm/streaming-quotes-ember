@@ -15,17 +15,15 @@ var StocksRoute = Ember.Route.extend({
     var self = this;
 
     controller.set('model', {
-      lastUpdatedDate: null,
-      stocks: []
+      lastUpdatedDate: null
     });
 
     model.symbols.then(function(obj) {
       var streamer = Streamer.create({
+        onConnect: function(data) {
+          controller.set('stocks', _.values(data));
+        },
         onUpdate: function(updates, date) {
-          if (!controller.get('model.lastUpdatedDate')) {
-            controller.set('stocks', _.values(updates));
-          }
-
           controller.set('updates', updates);
           controller.set('model.lastUpdatedDate', date);
         },

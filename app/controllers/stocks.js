@@ -3,7 +3,6 @@ import Ember from 'ember';
 import moment from '../utils/moment';
 
 var StocksController = Ember.ObjectController.extend({
-  updates: {},
   lastUpdated: function() {
     if (!this.get('model.lastUpdatedDate')){
       return 'Waiting...';
@@ -49,7 +48,8 @@ var StocksController = Ember.ObjectController.extend({
 
       return display;
     });
-  }.property('updates')
+  }.property('updates'),
+  updates: {}
 });
 
 export default StocksController;
