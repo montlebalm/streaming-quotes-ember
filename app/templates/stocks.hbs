@@ -1,0 +1,25 @@
+<em>(stocks)</em>
+
+<p>Last Updated: {{lastUpdated}}</p>
+<table class="table stocks-table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th class="col-ask">Ask</th>
+      <th class="col-bid">Bid</th>
+      <th class="col-price">Price</th>
+      <th class="col-volume">Volume</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each stocksDisplay}}
+      <tr>
+        <td>{{name}} (<span class="stock-symbol">{{symbol}}</span>)</td>
+        <td class="col-ask">{{streaming-cell values.ask '$0,0.00'}}</td>
+        <td class="col-bid">{{streaming-cell values.bid '$0,0.00'}}</td>
+        <td class="col-price">{{streaming-cell values.price '$0,0.00'}}</td>
+        <td class="col-volume">{{streaming-cell values.volume '0.00a'}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

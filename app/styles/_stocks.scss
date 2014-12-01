@@ -1,0 +1,20 @@
+.stock-symbol {
+  text-transform: uppercase;
+}
+
+.stocks-table {
+  .col-ask,
+  .col-bid,
+  .col-price,
+  .col-volume {
+    text-align: right;
+  }
+
+  td span {
+    padding: 2px;
+  }
+
+  .updated {
+    background: yellow;
+  }
+}
