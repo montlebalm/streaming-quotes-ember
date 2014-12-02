@@ -15,6 +15,30 @@
   }
 
   .updated {
+    -webkit-animation: highlight 1s;
+    animation: highlight 1s;
+  }
+}
+
+@-webkit-keyframes highlight {
+  0% {
     background: yellow;
+  }
+  50% {
+    background: yellow;
+  }
+  100% {
+    background: none;
+  }
+}
+@keyframes highlight {
+  0% {
+    background: yellow;
+  }
+  50% {
+    background: yellow;
+  }
+  100% {
+    background: none;
   }
 }

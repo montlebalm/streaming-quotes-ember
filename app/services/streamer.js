@@ -1,27 +1,28 @@
 import _ from '../utils/underscore';
 import Ember from 'ember';
 
-var COLUMNS = ['ask', 'bid', 'price', 'volume'];
-var STOCKS = {
-  a: makeStock('a', 'Agile A'),
-  b: makeStock('b', 'B Brothers'),
-  c: makeStock('c', 'C co.'),
-  d: makeStock('d', 'D Dungarees'),
-  e: makeStock('e', 'Electric E Inc.'),
-  f: makeStock('f', 'Fantastic F co.'),
-  g: makeStock('g', 'Guaranteed G LLC.'),
-  h: makeStock('h', 'Hyped H'),
-  i: makeStock('i', 'Industrious I Inc.')
-};
-
-function makeStock(symbol, name) {
+function stockToDisplay(stock) {
   return {
-    symbol: symbol,
-    name: name,
-    ask: 100,
-    bid: 100,
-    price: 100,
-    volume: 1000000
+    name: stock.get('name'),
+    symbol: stock.get('symbol'),
+    values: {
+      ask: {
+        value: stock.get('ask'),
+        updated: false
+      },
+      bid: {
+        value: stock.get('bid'),
+        updated: false
+      },
+      price: {
+        value: stock.get('price'),
+        updated: false
+      },
+      volume: {
+        value: stock.get('volume'),
+        updated: false
+      }
+    }
   };
 }
 
@@ -30,49 +31,40 @@ function randomVariant(seed) {
   return seed + (Math.random() * seed / 99);
 }
 
-function getUpdate(stock) {
-  var updates = {};
-
-  _.each(COLUMNS, function(col) {
+function updateStock(stock) {
+  _.each(stock.values, function(value, key) {
     // Only update some fields
-    if (Math.floor(Math.random() * 4) === 0) {
-      updates[col] = randomVariant(stock[col]);
+    if (Math.floor(Math.random() * 5) === 0) {
+      stock.values[key].value = randomVariant(stock.values[key].value);
+      stock.values[key].updated = true;
+    } else {
+      stock.values[key].updated = false;
     }
   });
 
-  return updates;
+  return stock;
 }
 
 var Streamer = Ember.Object.extend(Ember.Evented, {
   schedule: function() {
     return Ember.run.later(this, function() {
-      var updates = {};
-      var stocks = this.get('stocks');
+      var stocks = _.map(this.get('stocks'), updateStock);
 
-      _.each(stocks, function(stock) {
-        updates[stock.symbol] = getUpdate(stock);
-      });
-
-      this.trigger('update', updates, new Date(), stocks);
+      this.trigger('update', new Date(), stocks);
       this.set('timer', this.schedule());
     }, 1000);
   },
-  start: function(symbols) {
-    this.set('symbols', symbols);
+  start: function(stocks) {
+    var formatted = _.map(stocks.toArray(), stockToDisplay);
+    this.set('stocks', formatted);
 
-    // Do the initial stock setup
-    this.set('stocks', _.map(this.get('symbols'), function(s) {
-      return STOCKS[s.get('symbol')];
-    }));
-    this.trigger('connect', STOCKS);
-
+    this.trigger('connect');
     this.set('timer', this.schedule());
   },
   stocks: [],
   stop: function() {
     Ember.run.cancel(this.get('timer'));
-  },
-  symbols: []
+  }
 });
 
 export default Streamer;

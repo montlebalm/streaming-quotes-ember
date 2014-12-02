@@ -1,35 +1,29 @@
-import _ from '../utils/underscore';
 import Ember from 'ember';
 
 var StocksRoute = Ember.Route.extend({
   deactivate: function() {
-    this.get('streamer').stop();
+    var streamer = this.get('streamer');
+    streamer.stop();
   },
   model: function() {
     return {
-      symbols: this.store.find('symbol')
+      lastUpdatedDate: null,
+      stocks: this.store.find('stock')
     };
   },
   setupController: function(controller, model) {
-    controller.set('model', {
-      lastUpdatedDate: null,
-      updates: {}
-    });
+    controller.set('model', model);
 
     var streamer = this.get('streamer');
-    streamer.on('connect', this, 'onStreamConnect');
     streamer.on('update', this, 'onStreamUpdate');
 
-    model.symbols.then(function() {
-      streamer.start(model.symbols.toArray());
+    model.stocks.then(function(stocks) {
+      streamer.start(stocks);
     });
   },
-  onStreamConnect: function(data) {
-    this.controller.set('stocks', _.values(data));
-  },
-  onStreamUpdate: function(updates, date, data) {
-    this.controller.set('model.updates', updates);
+  onStreamUpdate: function(date, stocks) {
     this.controller.set('model.lastUpdatedDate', date);
+    this.controller.set('model.stocks', stocks);
   }
 });
 

@@ -6,4 +6,4 @@ export default {
     application.register('streamer:main', Streamer);
     application.inject('route', 'streamer', 'streamer:main');
   }
-}
+};
