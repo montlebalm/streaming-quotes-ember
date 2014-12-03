@@ -4,8 +4,7 @@ import {
 
 module('FormatNumberHelper');
 
-// Replace this with your real tests.
-test('it works', function() {
+test('it accepts null format', function() {
   var result = formatNumber(42);
-  ok(result);
+  equal(result, 42, 'Returns original number');
 });
