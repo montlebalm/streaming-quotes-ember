@@ -7,13 +7,10 @@ var StocksRoute = Ember.Route.extend({
   },
   model: function() {
     return {
-      lastUpdatedDate: null,
       stocks: this.store.find('stock')
     };
   },
   setupController: function(controller, model) {
-    controller.set('model', model);
-
     var streamer = this.get('streamer');
     streamer.on('update', this, 'onStreamUpdate');
 
@@ -22,8 +19,8 @@ var StocksRoute = Ember.Route.extend({
     });
   },
   onStreamUpdate: function(date, stocks) {
-    this.controller.set('model.lastUpdatedDate', date);
-    this.controller.set('model.stocks', stocks);
+    this.controller.set('lastUpdatedDate', date);
+    this.controller.set('stocks', stocks);
   }
 });
 

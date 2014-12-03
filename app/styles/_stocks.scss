@@ -1,3 +1,5 @@
+$highlightSpeed: 0.5s;
+
 .stock-symbol {
   text-transform: uppercase;
 }
@@ -15,16 +17,13 @@
   }
 
   .updated {
-    -webkit-animation: highlight 1s;
-    animation: highlight 1s;
+    -webkit-animation: highlight $highlightSpeed;
+    animation: highlight $highlightSpeed;
   }
 }
 
 @-webkit-keyframes highlight {
-  0% {
-    background: yellow;
-  }
-  50% {
+  75% {
     background: yellow;
   }
   100% {
@@ -32,10 +31,7 @@
   }
 }
 @keyframes highlight {
-  0% {
-    background: yellow;
-  }
-  50% {
+  75% {
     background: yellow;
   }
   100% {

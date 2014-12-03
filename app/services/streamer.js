@@ -7,20 +7,20 @@ function stockToDisplay(stock) {
     symbol: stock.get('symbol'),
     values: {
       ask: {
-        value: stock.get('ask'),
-        updated: false
+        last: stock.get('ask'),
+        value: stock.get('ask')
       },
       bid: {
-        value: stock.get('bid'),
-        updated: false
+        last: stock.get('bid'),
+        value: stock.get('bid')
       },
       price: {
-        value: stock.get('price'),
-        updated: false
+        last: stock.get('price'),
+        value: stock.get('price')
       },
       volume: {
-        value: stock.get('volume'),
-        updated: false
+        last: stock.get('volume'),
+        value: stock.get('volume')
       }
     }
   };
@@ -33,6 +33,8 @@ function randomVariant(seed) {
 
 function updateStock(stock) {
   _.each(stock.values, function(value, key) {
+    stock.values[key].last = stock.values[key].value;
+
     // Only update some fields
     if (Math.floor(Math.random() * 5) === 0) {
       stock.values[key].value = randomVariant(stock.values[key].value);
@@ -59,6 +61,7 @@ var Streamer = Ember.Object.extend(Ember.Evented, {
     this.set('stocks', formatted);
 
     this.trigger('connect');
+    this.trigger('update', new Date(), formatted);
     this.set('timer', this.schedule());
   },
   stocks: [],
