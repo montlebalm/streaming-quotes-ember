@@ -11,15 +11,11 @@ $highlightSpeed: 0.5s;
   .col-volume {
     text-align: right;
   }
+}
 
-  td span {
-    padding: 2px;
-  }
-
-  .updated {
-    -webkit-animation: highlight $highlightSpeed;
-    animation: highlight $highlightSpeed;
-  }
+.updated {
+  -webkit-animation: highlight $highlightSpeed;
+  animation: highlight $highlightSpeed;
 }
 
 @-webkit-keyframes highlight {
