@@ -3,6 +3,7 @@ import numeral from '../utils/numeral';
 
 export default Ember.Component.extend({
   classNameBindings: ['updated'],
+  classNames: ['stream-cell'],
   format: '0',
   last: 0,
   lastFormatted: function() {
