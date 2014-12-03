@@ -10,7 +10,6 @@ export default Ember.Component.extend({
   }.property('last', 'format'),
   tagName: 'span',
   updated: function() {
-    console.log('checked');
     return this.get('valueFormatted') !== this.get('lastFormatted');
   }.property('value', 'last'),
   value: 0,
