@@ -3,8 +3,8 @@
   <thead>
     <tr>
       <th>Name</th>
-      <th class="col-ask">Ask</th>
-      <th class="col-bid">Bid</th>
+      <th class="col-ask">Ask / Size</th>
+      <th class="col-bid">Bid / Size</th>
       <th class="col-price">Price</th>
       <th class="col-volume">Volume</th>
     </tr>
@@ -15,9 +15,13 @@
         <td>{{name}} (<span class="stock-symbol">{{symbol}}</span>)</td>
         <td class="col-ask">
           {{stream-cell value=values.ask.value last=values.ask.last format='$0,0.00'}}
+          /
+          {{stream-cell value=values.askSize.value last=values.askSize.last}}
         </td>
         <td class="col-bid">
           {{stream-cell value=values.bid.value last=values.bid.last format='$0,0.00'}}
+          /
+          {{stream-cell value=values.bidSize.value last=values.bidSize.last}}
         </td>
         <td class="col-price">
           {{stream-cell value=values.price.value last=values.price.last format='$0,0.00'}}

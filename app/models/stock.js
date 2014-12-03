@@ -2,7 +2,9 @@ import DS from 'ember-data';
 
 var Stock = DS.Model.extend({
   ask: DS.attr('number'),
+  askSize: DS.attr('number'),
   bid: DS.attr('number'),
+  bidSize: DS.attr('number'),
   name: DS.attr('string'),
   price: DS.attr('number'),
   symbol: DS.attr('string'),
@@ -17,7 +19,9 @@ function makeStock(symbol, name) {
     symbol: symbol,
     name: name,
     ask: 100,
+    askSize: 100,
     bid: 100,
+    bidSize: 100,
     price: 100,
     volume: 1000000
   };

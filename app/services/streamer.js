@@ -1,25 +1,35 @@
 import _ from '../utils/underscore';
 import Ember from 'ember';
 
+var UPDATE_INTERVAL = 1000;
+
 function stockToDisplay(stock) {
   return {
     name: stock.get('name'),
     symbol: stock.get('symbol'),
     values: {
       ask: {
-        last: stock.get('ask'),
+        last: null,
         value: stock.get('ask')
       },
+      askSize: {
+        last: null,
+        value: stock.get('askSize')
+      },
       bid: {
-        last: stock.get('bid'),
+        last: null,
         value: stock.get('bid')
       },
+      bidSize: {
+        last: null,
+        value: stock.get('bidSize')
+      },
       price: {
-        last: stock.get('price'),
+        last: null,
         value: stock.get('price')
       },
       volume: {
-        last: stock.get('volume'),
+        last: null,
         value: stock.get('volume')
       }
     }
@@ -38,9 +48,6 @@ function updateStock(stock) {
     // Only update some fields
     if (Math.floor(Math.random() * 5) === 0) {
       stock.values[key].value = randomVariant(stock.values[key].value);
-      stock.values[key].updated = true;
-    } else {
-      stock.values[key].updated = false;
     }
   });
 
@@ -54,7 +61,7 @@ var Streamer = Ember.Object.extend(Ember.Evented, {
 
       this.trigger('update', new Date(), stocks);
       this.set('timer', this.schedule());
-    }, 1000);
+    }, UPDATE_INTERVAL);
   },
   start: function(stocks) {
     var formatted = _.map(stocks.toArray(), stockToDisplay);
