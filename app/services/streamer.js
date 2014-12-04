@@ -1,8 +1,6 @@
 import _ from '../utils/underscore';
 import Ember from 'ember';
 
-var UPDATE_INTERVAL = 1000;
-
 function stockToDisplay(stock) {
   return {
     name: stock.get('name'),
@@ -55,16 +53,18 @@ function updateStock(stock) {
 }
 
 var Streamer = Ember.Object.extend(Ember.Evented, {
+  interval: 1000,
   schedule: function() {
     return Ember.run.later(this, function() {
       var stocks = _.map(this.get('stocks'), updateStock);
 
       this.trigger('update', new Date(), stocks);
       this.set('timer', this.schedule());
-    }, UPDATE_INTERVAL);
+    }, this.get('interval'));
   },
   start: function(stocks) {
-    var formatted = _.map(stocks.toArray(), stockToDisplay);
+    stocks = (stocks) ? stocks.toArray() : [];
+    var formatted = _.map(stocks, stockToDisplay);
     this.set('stocks', formatted);
 
     this.trigger('connect');
