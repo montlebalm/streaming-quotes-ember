@@ -41,11 +41,11 @@ function randomVariant(seed) {
 
 function updateStock(stock) {
   _.each(stock.values, function(value, key) {
-    stock.values[key].last = stock.values[key].value;
+    Ember.set(stock, 'values.' + key + '.last', Ember.get(value, 'value'));
 
     // Only update some fields
     if (Math.floor(Math.random() * 5) === 0) {
-      stock.values[key].value = randomVariant(stock.values[key].value);
+      Ember.set(stock, 'values.' + key + '.value', randomVariant(Ember.get(value, 'value')));
     }
   });
 

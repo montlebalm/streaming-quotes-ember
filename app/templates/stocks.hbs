@@ -1,7 +1,7 @@
-{{#feature-flag "title"}}
+{{#feature-flag key="title"}}
   <h1>
     Streaming Stocks
-    {{#feature-flag "subtitle"}}
+    {{#feature-flag key="subtitle"}}
       with Ember
     {{/feature-flag}}
   </h1>
@@ -19,24 +19,24 @@
     </tr>
   </thead>
   <tbody>
-    {{#each stocks}}
+    {{#each s in stocks}}
       <tr>
-        <td>{{name}} (<span class="stock-symbol">{{symbol}}</span>)</td>
+        <td>{{s.name}} (<span class="stock-symbol">{{s.symbol}}</span>)</td>
         <td class="col-ask">
-          {{stream-cell value=values.ask.value last=values.ask.last format='$0,0.00'}}
+          {{stream-cell value=s.values.ask.value last=s.values.ask.last format='$0,0.00'}}
           /
-          {{stream-cell value=values.askSize.value last=values.askSize.last}}
+          {{stream-cell value=s.values.askSize.value last=s.values.askSize.last}}
         </td>
         <td class="col-bid">
-          {{stream-cell value=values.bid.value last=values.bid.last format='$0,0.00'}}
+          {{stream-cell value=s.values.bid.value last=s.values.bid.last format='$0,0.00'}}
           /
-          {{stream-cell value=values.bidSize.value last=values.bidSize.last}}
+          {{stream-cell value=s.values.bidSize.value last=s.values.bidSize.last}}
         </td>
         <td class="col-price">
-          {{stream-cell value=values.price.value last=values.price.last format='$0,0.00'}}
+          {{stream-cell value=s.values.price.value last=s.values.price.last format='$0,0.00'}}
         </td>
         <td class="col-volume">
-          {{stream-cell value=values.volume.value last=values.volume.last format='0.00a'}}
+          {{stream-cell value=s.values.volume.value last=s.values.volume.last format='0.00a'}}
         </td>
       </tr>
     {{/each}}
