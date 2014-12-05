@@ -4,13 +4,28 @@ $highlightSpeed: 0.5s;
   text-transform: uppercase;
 }
 
-.stocks-table {
+.table {
   .col-ask,
   .col-bid,
   .col-price,
-  .col-volume {
+  .col-volume,
+  .col-remove {
     text-align: right;
   }
+
+  th:first-child,
+  td:first-child {
+    padding-left: 0;
+  }
+
+  th:last-child,
+  td:last-child {
+    padding-right: 0;
+  }
+}
+
+.last-updated {
+  color: #999;
 }
 
 .updated {

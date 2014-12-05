@@ -6,7 +6,9 @@ var Router = Ember.Router.extend({
 });
 
 Router.map(function() {
-  this.resource('stocks', { path: '/' });
+  this.resource('index', { path: '/' });
+  this.resource('watchlists');
+  this.resource('watchlist', { path: '/watchlists/:id' });
 });
 
 export default Router;
