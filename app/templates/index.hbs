@@ -1,0 +1,21 @@
+<h2>Watchlists</h2>
+<table class="table stocks-table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th># Stocks</th>
+      <th>Last modified</th>
+      <th>Date created</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each watchlistsSorted}}
+      <tr>
+        <td>{{#link-to 'watchlist' this}}{{name}}{{/link-to}}</td>
+        <td>{{stocks.length}}</td>
+        <td>{{format-date dateModified 'L h:mm:ss a'}}</td>
+        <td>{{format-date dateCreated 'L'}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

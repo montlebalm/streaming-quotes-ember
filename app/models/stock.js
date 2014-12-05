@@ -30,15 +30,15 @@ function makeStock(symbol, name) {
 // Fixtures
 Stock.reopenClass({
   FIXTURES: [
-    makeStock('a', 'Agile A'),
-    makeStock('b', 'B Brothers'),
-    makeStock('c', 'C co.'),
-    makeStock('d', 'D Dungarees'),
-    makeStock('e', 'Electric E Inc.'),
-    makeStock('f', 'Fantastic F co.'),
-    makeStock('g', 'Guaranteed G LLC.'),
-    makeStock('h', 'Hyped H'),
-    makeStock('i', 'Industrious I Inc.')
+    makeStock('a', 'Company A'),
+    makeStock('b', 'Company B'),
+    makeStock('c', 'Company C'),
+    makeStock('d', 'Company D'),
+    makeStock('e', 'Company E'),
+    makeStock('f', 'Company F'),
+    makeStock('g', 'Company G'),
+    makeStock('h', 'Company H'),
+    makeStock('i', 'Company I')
   ]
 });
 
