@@ -1,4 +1,3 @@
-import _ from '../utils/underscore';
 import Ember from 'ember';
 
 export default Ember.Route.extend({

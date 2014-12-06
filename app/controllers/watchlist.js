@@ -26,10 +26,13 @@ function stockToDisplay(stock, update) {
 export default Ember.Controller.extend({
   lastUpdated: function() {
     var date = this.get('lastUpdatedDate');
+    var text = LAST_UPDATED_TEXT;
 
     if (date) {
-      return moment(date).format(LAST_UPDATED_FORMAT);
+      text = moment(date).format(LAST_UPDATED_FORMAT);
     }
+
+    return text;
   }.property('lastUpdatedDate'),
   lastUpdatedDate: null,
   stocks: function() {
@@ -38,7 +41,6 @@ export default Ember.Controller.extend({
     return _.map(this.get('watchlist.stocks').toArray(), function(stock) {
       return stockToDisplay(stock, updates[stock.get('symbol')]);
     });
-  // }.property('watchlist.stocks.[]'),
   }.property('updates'),
   updates: {},
   watchlist: {}
