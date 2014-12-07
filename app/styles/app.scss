@@ -3,3 +3,11 @@
 html, body {
   margin: 20px;
 }
+
+[data-ember-action] {
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: none;
+  }
+}

@@ -34,7 +34,7 @@
               {{stream-cell value=stock.volume.value last=stock.volume.last format='0.00a'}}
             </td>
             <td class="col-remove">
-              <button {{action "removeStock" stock.id}}>X</button>
+              <a {{action "removeStock" stock.id}}>&times;</a>
             </td>
           </tr>
         {{else}}
