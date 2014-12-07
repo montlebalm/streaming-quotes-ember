@@ -30,7 +30,6 @@ export default Ember.Route.extend({
     });
   },
   onStreamUpdate: function(date, updates) {
-    console.log('onStreamUpdate');
     if (updates) {
       this.controller.set('lastUpdatedDate', date);
       this.controller.set('updates', updates);

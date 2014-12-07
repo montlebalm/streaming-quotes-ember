@@ -38,8 +38,6 @@ export default Ember.Controller.extend({
   stocks: function() {
     var updates = this.get('updates');
 
-    console.log('renegerate stocks');
-
     return this.get('watchlist.stocks').map(function(stock) {
       return stockToDisplay(stock, updates[stock.get('symbol')]);
     });
