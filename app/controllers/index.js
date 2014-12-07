@@ -1,11 +1,7 @@
-import _ from '../utils/underscore';
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
+  sortFields: ['name'],
   watchlists: [],
-  watchlistsSorted: function() {
-    return _.sortBy(this.get('watchlists').toArray(), function(watchlist) {
-      return watchlist.get('name');
-    });
-  }.property('watchlists.[]')
+  watchlistsSorted: Ember.computed.sort('watchlists', 'sortFields')
 });

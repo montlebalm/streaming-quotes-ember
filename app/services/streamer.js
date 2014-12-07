@@ -10,30 +10,27 @@ function randomVariant(seed) {
 }
 
 function updateStock(stock) {
-  _.each(COLUMNS, function(key) {
+  COLUMNS.forEach(function(column) {
     if (Math.floor(Math.random() * 5) === 0) {
-      stock.set(key, randomVariant(stock.get(key)));
+      stock.set(column, randomVariant(stock.get(column)));
     }
   });
 
   var changes = stock.changedAttributes();
+  changes.symbol = stock.get('symbol');
   stock.save();
 
-  return _.defaults(changes, {
-    symbol: stock.get('symbol')
-  });
+  return changes;
 }
 
 var Streamer = Ember.Object.extend(Ember.Evented, {
   interval: 1000,
   schedule: function() {
     return Ember.run.later(this, function() {
-      var changes = _.chain(this.get('stocks').toArray())
-        .map(updateStock)
-        .indexBy('symbol')
-        .value();
+      var updates = this.get('stocks').map(updateStock);
+      var updatesBySymbol = _.indexBy(updates, 'symbol');
 
-      this.trigger('update', new Date(), changes);
+      this.trigger('update', new Date(), updatesBySymbol);
       this.set('timer', this.schedule());
     }, this.get('interval'));
   },

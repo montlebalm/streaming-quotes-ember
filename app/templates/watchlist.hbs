@@ -10,38 +10,47 @@
           <th class="col-bid">Bid / Size</th>
           <th class="col-price">Price</th>
           <th class="col-volume">Volume</th>
+          <th class="col-remove"></th>
         </tr>
       </thead>
       <tbody>
-        {{#each stocks}}
+        {{#each stock in stocks}}
           <tr>
-            <td>{{name}} (<span class="stock-symbol">{{symbol}}</span>)</td>
+            <td>{{stock.name}} (<span class="stock-symbol">{{stock.symbol}}</span>)</td>
             <td class="col-ask">
-              {{stream-cell value=ask.value last=ask.last format='$0,0.00'}}
+              {{stream-cell value=stock.ask.value last=stock.ask.last format='$0,0.00'}}
               /
-              {{stream-cell value=askSize.value last=askSize.last}}
+              {{stream-cell value=stock.askSize.value last=stock.askSize.last}}
             </td>
             <td class="col-bid">
-              {{stream-cell value=bid.value last=bid.last format='$0,0.00'}}
+              {{stream-cell value=stock.bid.value last=stock.bid.last format='$0,0.00'}}
               /
-              {{stream-cell value=bidSize.value last=bidSize.last}}
+              {{stream-cell value=stock.bidSize.value last=stock.bidSize.last}}
             </td>
             <td class="col-price">
-              {{stream-cell value=price.value last=price.last format='$0,0.00'}}
+              {{stream-cell value=stock.price.value last=stock.price.last format='$0,0.00'}}
             </td>
             <td class="col-volume">
-              {{stream-cell value=volume.value last=volume.last format='0.00a'}}
+              {{stream-cell value=stock.volume.value last=stock.volume.last format='0.00a'}}
+            </td>
+            <td class="col-remove">
+              <button {{action "removeStock" stock.id}}>X</button>
             </td>
           </tr>
         {{else}}
           <tr>
-            <td colspan="100%">Loading...</td>
+            <td colspan="100%">There are no stocks to display.</td>
           </tr>
         {{/each}}
       </tbody>
     </table>
-    {{#if lastUpdated}}
-      <p class="last-updated">Last Updated: {{lastUpdated}}</p>
-    {{/if}}
+    <p class="last-updated">
+      Last Updated:
+      {{#if lastUpdatedDate}}
+        {{format-date lastUpdatedDate 'h:mm:ss a'}}
+      {{else}}
+        Waiting...
+      {{/if}}
+    </p>
   </div>
 </div>

@@ -1,6 +1,16 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
+  actions: {
+    removeStock: function(id) {
+      var watchlist = this.get('controller.watchlist');
+
+      this.store.find('stock', id).then(function(stock) {
+        watchlist.get('stocks').removeObject(stock);
+        watchlist.save();
+      });
+    }
+  },
   deactivate: function() {
     var streamer = this.get('streamer');
     streamer.stop();
@@ -17,7 +27,6 @@ export default Ember.Route.extend({
 
     watchlist.get('stocks').then(function(stocks) {
       streamer.start(stocks);
-      controller.set('updates', {});
     });
   },
   onStreamUpdate: function(date, updates) {
@@ -25,6 +34,5 @@ export default Ember.Route.extend({
       this.controller.set('lastUpdatedDate', date);
       this.controller.set('updates', updates);
     }
-  },
-  watchlist: null
+  }
 });
