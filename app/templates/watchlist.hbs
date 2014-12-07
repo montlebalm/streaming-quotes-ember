@@ -44,8 +44,13 @@
         {{/each}}
       </tbody>
     </table>
-    {{#if lastUpdated}}
-      <p class="last-updated">Last Updated: {{lastUpdated}}</p>
-    {{/if}}
+    <p class="last-updated">
+      Last Updated:
+      {{#if lastUpdatedDate}}
+        {{format-date lastUpdatedDate 'h:mm:ss a'}}
+      {{else}}
+        Waiting...
+      {{/if}}
+    </p>
   </div>
 </div>
