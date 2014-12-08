@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import moment from '../utils/moment';
 
 // TODO: refactor this somewhere shared
 var COLUMNS = ['ask', 'askSize', 'bid', 'bidSize', 'price', 'volume'];
@@ -21,15 +20,32 @@ function stockToDisplay(stock, update) {
   return display;
 }
 
+function sortFn(field) {
+  return function(a, b) {
+    return (field === 'name') ? a.name > b.name : a[field].value > b[field].value;
+  };
+}
+
 export default Ember.Controller.extend({
   lastUpdatedDate: null,
+  sortAscending: true,
+  sortProperty: 'name',
+  sortedStocks: function() {
+    var field = this.get('sortProperty');
+    var sorted = this.get('stocks').sort(sortFn(field));
+
+    if (!this.get('sortAscending')) {
+      sorted.reverse();
+    }
+
+    return sorted;
+  }.property('stocks'),
   stocks: function() {
     var updates = this.get('updates');
-
     return this.get('watchlist.stocks').map(function(stock) {
       return stockToDisplay(stock, updates[stock.get('symbol')]);
     });
-  }.property('watchlist.stocks.[]', 'updates'),
+  }.property('watchlist.stocks.[]', 'updates', 'sortProperty', 'sortAscending'),
   updates: {},
   watchlist: { stocks: [] }
 });

@@ -9,6 +9,14 @@ export default Ember.Route.extend({
         watchlist.get('stocks').removeObject(stock);
         watchlist.save();
       });
+    },
+    sortBy: function(field) {
+      var lastProperty = this.get('controller.sortProperty');
+      var lastAscending = this.get('controller.sortAscending');
+      var ascending = (field === lastProperty) ? !lastAscending : true;
+
+      this.set('controller.sortProperty', field);
+      this.set('controller.sortAscending', ascending);
     }
   },
   deactivate: function() {
@@ -17,6 +25,12 @@ export default Ember.Route.extend({
   },
   model: function(params) {
     return this.store.find('watchlist', params.id);
+  },
+  onStreamUpdate: function(date, updates) {
+    if (updates) {
+      this.controller.set('lastUpdatedDate', date);
+      this.controller.set('updates', updates);
+    }
   },
   setupController: function(controller, watchlist) {
     var streamer = this.get('streamer');
@@ -28,11 +42,5 @@ export default Ember.Route.extend({
     watchlist.get('stocks').then(function(stocks) {
       streamer.start(stocks);
     });
-  },
-  onStreamUpdate: function(date, updates) {
-    if (updates) {
-      this.controller.set('lastUpdatedDate', date);
-      this.controller.set('updates', updates);
-    }
   }
 });

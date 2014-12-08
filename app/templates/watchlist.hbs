@@ -5,16 +5,30 @@
     <table class="table stocks-table">
       <thead>
         <tr>
-          <th>Name</th>
-          <th class="col-ask">Ask / Size</th>
-          <th class="col-bid">Bid / Size</th>
-          <th class="col-price">Price</th>
-          <th class="col-volume">Volume</th>
+          <th>
+            <a {{action 'sortBy' 'name'}}>Name</a>
+          </th>
+          <th class="col-ask">
+            <a {{action 'sortBy' 'ask'}}>Ask</a>
+            /
+            <a {{action 'sortBy' 'askSize'}}>Size</a>
+          </th>
+          <th class="col-bid">
+            <a {{action 'sortBy' 'bid'}}>Bid</a>
+            /
+            <a {{action 'sortBy' 'bidSize'}}>Size</a>
+          </th>
+          <th class="col-price">
+            <a {{action 'sortBy' 'price'}}>Price</a>
+          </th>
+          <th class="col-volume">
+            <a {{action 'sortBy' 'volume'}}>Volume</a>
+          </th>
           <th class="col-remove"></th>
         </tr>
       </thead>
       <tbody>
-        {{#each stock in stocks}}
+        {{#each stock in sortedStocks}}
           <tr>
             <td>{{stock.name}} (<span class="stock-symbol">{{stock.symbol}}</span>)</td>
             <td class="col-ask">
