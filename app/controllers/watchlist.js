@@ -22,7 +22,11 @@ function stockToDisplay(stock, update) {
 
 function sortFn(field) {
   return function(a, b) {
-    return (field === 'name') ? a.name > b.name : a[field].value > b[field].value;
+    if (field === 'name') {
+      return a.name > b.name;
+    } else {
+      return a[field].value > b[field].value;
+    }
   };
 }
 
@@ -30,21 +34,20 @@ export default Ember.Controller.extend({
   lastUpdatedDate: null,
   sortAscending: true,
   sortProperty: 'name',
-  sortedStocks: function() {
+  stocks: function() {
+    var updates = this.get('updates');
+    var stocks = this.get('watchlist.stocks').map(function(stock) {
+      return stockToDisplay(stock, updates[stock.get('symbol')]);
+    });
+
     var field = this.get('sortProperty');
-    var sorted = this.get('stocks').sort(sortFn(field));
+    var sorted = stocks.sort(sortFn(field));
 
     if (!this.get('sortAscending')) {
       sorted.reverse();
     }
 
     return sorted;
-  }.property('stocks'),
-  stocks: function() {
-    var updates = this.get('updates');
-    return this.get('watchlist.stocks').map(function(stock) {
-      return stockToDisplay(stock, updates[stock.get('symbol')]);
-    });
   }.property('watchlist.stocks.[]', 'updates', 'sortProperty', 'sortAscending'),
   updates: {},
   watchlist: { stocks: [] }
